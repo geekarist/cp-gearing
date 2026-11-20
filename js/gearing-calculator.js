@@ -13,7 +13,15 @@ const WHEEL_STANDARDS = {
   '20"': 406,
   '20" (racing)': 451,
   '16"': 349,
-  '16" (Brompton)': 349
+  '16" (Brompton)': 349,
+  // Common aliases without inch symbols
+  '29': 622,
+  '28': 622,
+  '27.5': 584,
+  '26': 559,
+  '24': 507,
+  '20': 406,
+  '16': 349
 };
 
 const CHAINRING_STANDARDS = {
@@ -35,11 +43,44 @@ const CASSETTE_STANDARDS = {
 
 class GearingCalculator {
   static getWheelETRTO(wheelName) {
-    return WHEEL_STANDARDS[wheelName] || null;
+    if (!wheelName) return null;
+    
+    // Normalize the input: remove extra spaces and quotes
+    const normalized = wheelName.trim().replace(/[""]/g, '').toLowerCase();
+    
+    // Try direct match first
+    if (WHEEL_STANDARDS[wheelName]) {
+      return WHEEL_STANDARDS[wheelName];
+    }
+    
+    // Try normalized match
+    if (WHEEL_STANDARDS[normalized]) {
+      return WHEEL_STANDARDS[normalized];
+    }
+    
+    // Handle common patterns like "20 inches", "20in", "20 inch"
+    const numMatch = normalized.match(/^(\d+(?:\.\d+)?)/);
+    if (numMatch) {
+      const num = numMatch[1];
+      // Try with just the number
+      if (WHEEL_STANDARDS[num]) {
+        return WHEEL_STANDARDS[num];
+      }
+      // Try with inch symbol
+      if (WHEEL_STANDARDS[`${num}"`]) {
+        return WHEEL_STANDARDS[`${num}"`];
+      }
+    }
+    
+    return null;
   }
 
   static getAllWheelNames() {
-    return Object.keys(WHEEL_STANDARDS).sort();
+    // Return only the canonical names (those with inch symbols or special names)
+    const canonicalNames = Object.keys(WHEEL_STANDARDS).filter(name => 
+      name.includes('"') || name.includes('c') || name.includes('b') || name.includes('(')
+    );
+    return canonicalNames.sort();
   }
 
   static getChainringPresets() {
