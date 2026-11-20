@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CP Gears - Bicycle Drivetrain Calculator</title>
+  <meta name="description" content="Calculate bicycle gearing ratios, gear-inches, and speed tables">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    }
+    
+    cp-gears-app {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+      margin: 20px;
+    }
+    
+    @media (min-width: 768px) {
+      cp-gears-app {
+        margin: 40px;
+      }
+    }
+    
+    @media (min-width: 1200px) {
+      cp-gears-app {
+        max-width: 1400px;
+        margin: 40px auto;
+      }
+    }
+    
+    /* Loading animation */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #4a90e2;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <cp-gears-app></cp-gears-app>
+  
+  <!-- Load components -->
+  <script src="js/gearing-calculator.js"></script>
+  <script src="components/cp-gears-input.js"></script>
+  <script src="components/cp-gears-results.js"></script>
+  <script src="components/cp-gears-app.js"></script>
+  
+  <!-- Initialize -->
+  <script>
+    // Optional: Add loading state
+    document.addEventListener('DOMContentLoaded', function() {
+      const loading = document.querySelector('.loading-overlay');
+      if (loading) {
+        loading.remove();
+      }
+    });
+  </script>
+</body>
+</html>
